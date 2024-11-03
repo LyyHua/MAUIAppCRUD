@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:FirstMAUIApp.Entities"
+             x:Class="FirstMAUIApp.DetailPage"
+             xmlns:viewmodel="clr-namespace:FirstMAUIApp.ViewModel"
+             x:DataType="viewmodel:DetailViewModel">
+
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, *"
+          ColumnDefinitions=".75*, .25*"
+          Padding="10"
+          RowSpacing="10"
+          ColumnSpacing="10">
+
+        <Entry Placeholder="Enter student name"
+               Grid.Row="0"
+               Text="{Binding StudentName}"/>
+
+        <Entry Placeholder="Enter student MSSV"
+               Grid.Row="1"
+               Text="{Binding StudentMssv}"/>
+
+        <Entry Placeholder="Enter student DoB"
+               Grid.Row="2"
+               Text="{Binding StudentDob}"/>
+
+        <Button Text="Add"
+                Command="{Binding AddStudentCommand}"
+                Grid.Row="3"
+                Grid.ColumnSpan="2"/>
+
+        <CollectionView Grid.Row="4" Grid.ColumnSpan="2"
+                        ItemsSource="{Binding Students}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Student">
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Delete"
+                                           BackgroundColor="Red"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:DetailViewModel}}, Path=DeleteStudentCommand}"
+                                           CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid Padding="0,5">
+                            <Frame>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:DetailViewModel}}, Path=UpdateStudentCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Padding="0, 0, 18, 0" Text="{Binding Name}" 
+                                           FontSize="24"/>
+                                    <Label Padding="0, 0, 18, 0" Text="{Binding MSSV}" 
+                                           FontSize="24"/>
+                                    <Label Padding="0,0,18,0" Text="{Binding DoB}" 
+                                           FontSize="24"/>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
